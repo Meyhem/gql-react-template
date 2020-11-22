@@ -1,10 +1,11 @@
 import { Input, Button, Alert } from 'antd'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
-// import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
-import { useIssueToken } from '../features/user/mutation'
+import { useIssueToken } from '../features/user'
 import { required } from '../forms/validators'
+import { useEffect } from 'react'
 
 const CenteredContent = styled.div`
   display: flex;
@@ -29,7 +30,14 @@ const LoginForm = styled.form`
 `
 
 export const Login = () => {
-  const [issueToken, { loading, error }] = useIssueToken()
+  const [issueToken, { error, data }] = useIssueToken()
+  const history = useHistory()
+
+  useEffect(() => {
+    if (!data) return
+
+    history.push('/dashboard')
+  }, [data, history])
 
   return (
     <CenteredContent>
@@ -37,7 +45,7 @@ export const Login = () => {
         onSubmit={async ({ username, password }) => {
           await issueToken({ variables: { username, password } })
         }}
-        render={({ handleSubmit, valid }) => (
+        render={({ handleSubmit, valid, submitting }) => (
           <LoginForm onSubmit={handleSubmit}>
             <Field
               name="username"
@@ -55,7 +63,7 @@ export const Login = () => {
               )}
             />
             {error && <Alert type="error" message={error.message} />}
-            <Button disabled={loading || !valid} htmlType="submit">
+            <Button disabled={submitting || !valid} htmlType="submit">
               Log In
             </Button>
           </LoginForm>
