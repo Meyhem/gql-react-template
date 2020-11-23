@@ -3,7 +3,7 @@ import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
 import { useHistory } from 'react-router-dom'
 
-import { useIssueToken } from '../features/user'
+import { useApiIssueToken } from '../features/user'
 import { required } from '../forms/validators'
 import { useEffect } from 'react'
 
@@ -30,7 +30,7 @@ const LoginForm = styled.form`
 `
 
 export const Login = () => {
-  const [issueToken, { error, data }] = useIssueToken()
+  const [issueToken, { error, data }] = useApiIssueToken()
   const history = useHistory()
 
   useEffect(() => {

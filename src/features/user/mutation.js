@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client'
 import _ from 'lodash'
 import { useRecoilState } from 'recoil'
 
-import { tokenState } from './atoms'
+import { tokenState } from './state'
 
 const ISSUE_TOKEN = gql`
   mutation IssueToken($username: String!, $password: String!) {
@@ -10,7 +10,7 @@ const ISSUE_TOKEN = gql`
   }
 `
 
-export function useIssueToken() {
+export function useApiIssueToken() {
   const [, setToken] = useRecoilState(tokenState)
 
   const [issueToken, mut] = useMutation(ISSUE_TOKEN, {
