@@ -1,11 +1,9 @@
 import { Input, Button, Alert } from 'antd'
 import { Form, Field } from 'react-final-form'
 import styled from 'styled-components'
-import { useHistory } from 'react-router-dom'
 
 import { useApiIssueToken } from '../features/user'
 import { required } from '../forms/validators'
-import { useEffect } from 'react'
 
 const CenteredContent = styled.div`
   display: flex;
@@ -30,14 +28,7 @@ const LoginForm = styled.form`
 `
 
 export const Login = () => {
-  const [issueToken, { error, data }] = useApiIssueToken()
-  const history = useHistory()
-
-  useEffect(() => {
-    if (!data) return
-
-    history.push('/dashboard')
-  }, [data, history])
+  const [issueToken, { error }] = useApiIssueToken()
 
   return (
     <CenteredContent>
