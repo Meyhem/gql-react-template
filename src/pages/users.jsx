@@ -26,8 +26,8 @@ const cols = [
   {
     title: 'username',
     dataIndex: 'username',
-    sorter: (a, b) => a.length - b.length,
-    sortDirections: ['descend'],
+    sorter: true,
+    sortOrder: 'ascend',
   },
   { title: 'First name', dataIndex: 'firstname' },
   { title: 'Last name', dataIndex: 'lastname' },

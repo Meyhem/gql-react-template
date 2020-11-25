@@ -29,7 +29,11 @@ export const Table = ({
 }) => {
   return (
     <StyledTableContainer>
-      <StyledTable pagination={false} {...rest} />
+      <StyledTable
+        pagination={false}
+        onChange={(...args) => console.log(args)}
+        {...rest}
+      />
       <Pager>
         <Button
           disabled={skip <= 0}
