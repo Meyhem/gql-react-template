@@ -1,7 +1,8 @@
 import { Alert } from 'antd'
 import { useQuery, gql } from '@apollo/client'
+import _ from 'lodash'
 
-import { useUrlPagination } from '../features/table'
+import { useUrlTable, toListFilter } from '../features/table'
 
 import { Page } from '../components/page'
 import { Table } from '../components/table'
@@ -24,19 +25,19 @@ const cols = [
     dataIndex: 'id',
   },
   {
+    id: 'username',
     title: 'username',
     dataIndex: 'username',
     sorter: true,
-    sortOrder: 'ascend',
   },
   { title: 'First name', dataIndex: 'firstname' },
   { title: 'Last name', dataIndex: 'lastname' },
 ]
 
 export const Users = () => {
-  const [pagination, setPaging] = useUrlPagination(10)
+  const [tableState, setTableState] = useUrlTable(10)
   const { data, loading, error } = useQuery(QUERY_USERS, {
-    variables: { filter: { ...pagination } },
+    variables: { filter: { ...toListFilter(tableState) } },
   })
 
   return (
@@ -47,8 +48,10 @@ export const Users = () => {
         columns={cols}
         dataSource={data && data.users}
         loading={loading}
-        pagination={pagination}
-        onPaginationChange={setPaging}
+        pagination={_.pick(tableState, ['take', 'skip'])}
+        orderBy={tableState.orderBy}
+        onPaginationChange={setTableState}
+        onOrderByChange={setTableState}
       />
     </Page>
   )

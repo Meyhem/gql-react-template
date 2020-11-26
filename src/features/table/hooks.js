@@ -1,30 +1,31 @@
 import { useCallback } from 'react'
 import _ from 'lodash'
 import { useHistory } from 'react-router-dom'
-import { parse, stringify } from 'querystring'
+import { stringify } from 'querystring'
 
-function parseQs(qs) {
-  qs = qs.replace('?', '')
+import { parseQs, parseOrderBy, stringifyOrderBy } from './utils'
 
-  return parse(qs)
-}
-
-export function useUrlPagination(pageSize) {
+export function useUrlTable(pageSize) {
   const history = useHistory()
   const parsed = parseQs(history.location.search)
 
-  const current = {
+  const tableState = {
     skip: _.toNumber(parsed.skip || 0),
     take: _.toNumber(parsed.take || pageSize),
+    orderBy: parseOrderBy(parsed.orderBy),
   }
 
-  const setPaging = useCallback(
+  const setTableState = useCallback(
     target => {
-      const newQs = { ...parseQs(history.location.search), ...target }
+      const newQs = {
+        ...parseQs(history.location.search),
+        ...target,
+        orderBy: stringifyOrderBy(target.orderBy),
+      }
       history.push({ search: stringify(newQs) })
     },
     [history]
   )
 
-  return [current, setPaging]
+  return [tableState, setTableState]
 }
